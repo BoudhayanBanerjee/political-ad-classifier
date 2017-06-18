@@ -1,9 +1,7 @@
 import os
 import json
 import requests
-import subprocess
 from base64 import b64encode
-from mutagen.mp3 import MP3
 
 API_KEY = os.environ['google_api_key']
 

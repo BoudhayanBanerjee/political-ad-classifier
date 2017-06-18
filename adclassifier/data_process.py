@@ -41,11 +41,12 @@ def extract_audio(inputpath, outputpath):
         p.wait()
 
 
-def extract_frame(input_path, output_path):
+def extract_frame(inputpath, outputpath):
     """
     docstring
     """
     for video in os.listdir(inputpath):
+        print(video)
         # get the file name without file extension
         filename = os.path.splitext(video)[0]
         imagefolder = os.path.join(outputpath, filename)
