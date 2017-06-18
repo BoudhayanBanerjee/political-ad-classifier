@@ -1,3 +1,5 @@
+import os
+import json
 import subprocess
 from mutagen.mp3 import MP3
 from adclassifier.google_cloud import send_to_google
@@ -34,5 +36,5 @@ def text_from_image(inputpath, outputpath):
             # save response
             filename = '.'.join([os.path.splitext(image)[0], 'json'])
             fileout = os.path.join(filepath_out, filename)
-            with open(resp_json_abs_path, 'w') as f:
+            with open(fileout, 'w') as f:
                 json.dump(resp, f)
