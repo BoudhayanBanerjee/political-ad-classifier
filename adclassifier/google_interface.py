@@ -21,7 +21,7 @@ def json_parser(inputpath, outputpath, filetype):
                         recognized_text = ''
                         for i in range(1, len(data['responses'][0]['textAnnotations'])):
                             text = data['responses'][0]['textAnnotations'][i]['description']
-                            recognized_text += text.lower() + ','
+                            recognized_text += "{},".format(text.lower())
                     except:
                         pass
                 ocrtext += recognized_text
@@ -31,7 +31,42 @@ def json_parser(inputpath, outputpath, filetype):
             with open(filepath_out, 'w') as f:
                 f.write(ocrtext)
     else:
-        pass
+        for file in os.listdir(inputpath):
+            filepath_in = os.path.join(inputpath, file)
+            if os.path.isfile(filepath_in):
+                filename = os.path.splitext(file)[0]
+                with open(filepath_in, 'r') as f:
+                    data = json.load(f)
+                    # pprint(data)
+                    try:
+                        recognized_text = ''
+                        for i in range(len(data['results'])):
+                            text = data['results'][i]['alternatives'][0]['transcript']
+                            recognized_text += "{},".format(text.lower())
+                    except:
+                        pass
+                    transcript_text = recognized_text
+            else:
+                filename = file
+                transcript_text = ''
+                for i in os.listdir(filepath_in):
+                    inputfile = os.path.join(filepath_in, i)
+                    with open(inputfile, 'r') as f:
+                        data = json.load(f)
+                        # pprint(data)
+                        try:
+                            recognized_text = ''
+                            for i in range(len(data['results'])):
+                                text = data['results'][i]['alternatives'][0]['transcript']
+                                recognized_text += "{},".format(text.lower())
+                        except:
+                            pass
+                    transcript_text += recognized_text
+            # write to text
+            outfile = '.'.join([filename, 'txt'])
+            filepath_out = os.path.join(outputpath, outfile)
+            with open(filepath_out, 'w') as f:
+                f.write(transcript_text)
 
 
 def text_from_audio(inputpath, outputpath):
@@ -81,9 +116,12 @@ def text_from_audio(inputpath, outputpath):
                     os.remove(os.path.join(temp, file))
                 # send to google
                 resp = send_to_google(inputfile=flacaudio, filetype='audio')
+                # create directory to store splitted response
+                out = os.path.join(outputpath, filename)
+                os.makedirs(out, exist_ok=True)
                 # save response
                 partname = ".".join([os.path.splitext(file)[0], 'json'])
-                fileout = os.path.join(outputpath, '-'.join([filename, partname]))
+                fileout = os.path.join(outputpath, out, partname)
                 with open(fileout, 'w') as f:
                     json.dump(resp, f)
         else:
