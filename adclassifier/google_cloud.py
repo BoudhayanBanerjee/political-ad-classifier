@@ -19,7 +19,7 @@ def make_payload(inputfile, filetype):
                     "sampleRateHertz": 16000,
                     "languageCode": "en-US"
                 },
-                "audio": {"content": caudio}
+                "audio": {"content": file}
             }
             return json.dumps(payload)
         elif filetype == 'image':
