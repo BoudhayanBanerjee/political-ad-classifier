@@ -2,14 +2,36 @@ import os
 import json
 import subprocess as sp
 from mutagen.mp3 import MP3
+from pprint import pprint
+
 from adclassifier.google_cloud import send_to_google
 
 ffmpeg = os.environ['FFMPEG']
 
 
 def json_parser(inputpath, outputpath, filetype):
-    # TODO
-    pass
+    if filetype == 'image':
+        for folder in os.listdir(inputpath):
+            ocrtext = ''
+            for file in os.listdir(os.path.join(inputpath, folder)):
+                filepath_in = os.path.join(inputpath, folder, file)
+                with open(filepath_in, 'r') as f:
+                    data = json.load(f)
+                    try:
+                        recognized_text = ''
+                        for i in range(1, len(data['responses'][0]['textAnnotations'])):
+                            text = data['responses'][0]['textAnnotations'][i]['description']
+                            recognized_text += text.lower() + ','
+                    except:
+                        pass
+                ocrtext += recognized_text
+            # write to text
+            outfile = '.'.join([folder, 'txt'])
+            filepath_out = os.path.join(outputpath, outfile)
+            with open(filepath_out, 'w') as f:
+                f.write(ocrtext)
+    else:
+        pass
 
 
 def text_from_audio(inputpath, outputpath):
