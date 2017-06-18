@@ -46,7 +46,6 @@ def extract_frame(inputpath, outputpath):
     docstring
     """
     for video in os.listdir(inputpath):
-        print(video)
         # get the file name without file extension
         filename = os.path.splitext(video)[0]
         imagefolder = os.path.join(outputpath, filename)
@@ -67,4 +66,4 @@ def extract_frame(inputpath, outputpath):
                        'frame-%02d.png']
             p = sp.Popen(command, stdout=sp.PIPE, cwd=filepath_out, bufsize=10**8)
             p.wait()
-            change_dpi(input_path=filepath_out)
+            change_dpi(inputpath=filepath_out)
