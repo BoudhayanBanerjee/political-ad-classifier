@@ -2,7 +2,6 @@ import os
 import json
 import subprocess as sp
 from mutagen.mp3 import MP3
-from pprint import pprint
 
 from adclassifier.google_cloud import send_to_google
 
