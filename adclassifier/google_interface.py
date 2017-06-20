@@ -9,6 +9,9 @@ ffmpeg = os.environ['FFMPEG']
 
 
 def json_parser(inputpath, outputpath, filetype):
+    """
+    docstring
+    """
     if filetype == 'image':
         for folder in os.listdir(inputpath):
             ocrtext = ''
