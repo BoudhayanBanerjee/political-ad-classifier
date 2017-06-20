@@ -34,7 +34,19 @@ def hashvectorizer(inputpath=None, text=None):
     docstring
     """
     # TODO
-    pass
+    hv = HashingVectorizer()
+    if inputpath:
+        filenames = [os.path.join(inputpath, file) for file in os.listdir(inputpath)]
+        corpus = []
+        for file in filenames:
+            with open(file, 'r') as f:
+                data = f.read()
+                corpus.append(data)
+    if text:
+        corpus = text
+    X = hv.transform(corpus)
+    print(X.toarray())
+    print(hv.get_params())
 
 
 def tfidfvectorizer(inputpath=None, text=None):
@@ -46,4 +58,4 @@ def tfidfvectorizer(inputpath=None, text=None):
 
 if __name__ == "__main__":
     inputpath = r'D:\ypai\data\json\text'
-    countvectorizer(inputpath=inputpath)
+    hashvectorizer(inputpath=inputpath)
