@@ -13,6 +13,7 @@ def countvectorizer(inputpath=None, text=None):
     """
     docstring
     """
+    vectorizer = CountVectorizer(min_df=1)
     if inputpath:
         filenames = [os.path.join(inputpath, file) for file in os.listdir(inputpath)]
         corpus = []
@@ -20,12 +21,12 @@ def countvectorizer(inputpath=None, text=None):
             with open(file, 'r') as f:
                 data = f.read()
                 corpus.append(data)
-        vectorizer = CountVectorizer(min_df=1)
-        X = vectorizer.fit_transform(corpus)
-        print(X.toarray())
-        print(vectorizer.get_feature_names())
     if text:
-        content = text
+        corpus = text
+
+    X = vectorizer.fit_transform(corpus)
+    print(X.toarray())
+    print(vectorizer.get_feature_names())
 
 
 def hashvectorizer(inputpath=None, text=None):
