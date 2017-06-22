@@ -7,6 +7,11 @@ from adclassifier.google_cloud import send_to_google
 
 ffmpeg = os.environ['FFMPEG']
 
+def split_audio():
+    """
+    docstring
+    """
+    # TODO
 
 def json_parser(inputpath, outputpath, filetype):
     """
