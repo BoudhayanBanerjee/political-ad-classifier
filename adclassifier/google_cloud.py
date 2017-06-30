@@ -27,8 +27,8 @@ def make_payload(inputfile, filetype):
                        {
                            'image': {'content': file},
                            'features': [{
-                               'type': 'TEXT_DETECTION',
-                                        'maxResults': 1
+                               'type': 'WEB_DETECTION',
+                                        'maxResults': 3
                                         }]
                        }
                        }
@@ -56,3 +56,6 @@ def send_to_google(inputfile, filetype):
         return resp
     else:
         return None
+
+
+print(send_to_google(r'D:\adclassifier\labelled_dataset\political\images\PolAd_RickSantorum_TedCruz_8ljzn\frame-56.png', 'image'))

@@ -96,9 +96,9 @@ def run(inputPath):
     c = dict(c)
 
     # save as pickle
-    with open('../templates/dominantColor.pickle', 'wb') as p:
+    with open('../templates/dominantColorP3.pickle', 'wb') as p:
         pickle.dump(c, p)
 
 if __name__ == "__main__":
-    inputPath = r'D:\adclassifier\labelled_dataset\non_political\images'
+    inputPath = r'D:\adclassifier\labelled_dataset\political\images2'
     run(inputPath)
