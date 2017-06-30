@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import subprocess as sp
 from mutagen.mp3 import MP3
@@ -29,12 +30,15 @@ def json_parser(inputpath, outputpath, filetype):
                         for i in range(1, len(data['responses'][0]['textAnnotations'])):
                             text = data['responses'][0]['textAnnotations'][i]['description']
                             recognized_text += "{},".format(text.lower())
+                            # replace all non-ascii characters
+                            recognized_text = re.sub(r'[^\x00-\x7f]', r'', recognized_text)
                     except:
                         pass
                 ocrtext += recognized_text
             # write to text
             outfile = '.'.join([folder, 'txt'])
             filepath_out = os.path.join(outputpath, outfile)
+
             with open(filepath_out, 'w') as f:
                 f.write(ocrtext)
     else:
