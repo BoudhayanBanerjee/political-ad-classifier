@@ -27,6 +27,17 @@ def make_payload(inputfile, filetype):
                        {
                            'image': {'content': file},
                            'features': [{
+                               'type': 'TEXT_DETECTION',
+                                        'maxResults': 1
+                                        }]
+                       }
+                       }
+            return json.dumps(payload).encode()
+        elif filetype == 'web':
+            payload = {"requests":
+                       {
+                           'image': {'content': file},
+                           'features': [{
                                'type': 'WEB_DETECTION',
                                         'maxResults': 3
                                         }]
@@ -45,6 +56,8 @@ def send_to_google(inputfile, filetype):
         endpoint = 'https://speech.googleapis.com/v1/speech:recognize'
     elif filetype == 'image':
         endpoint = 'https://vision.googleapis.com/v1/images:annotate'
+    elif filetype == 'web':
+        endpoint = 'https://vision.googleapis.com/v1/images:annotate'
     else:
         endpoint = ''
     if endpoint:
@@ -56,6 +69,3 @@ def send_to_google(inputfile, filetype):
         return resp
     else:
         return None
-
-
-print(send_to_google(r'D:\adclassifier\labelled_dataset\political\images\PolAd_RickSantorum_TedCruz_8ljzn\frame-56.png', 'image'))

@@ -3,16 +3,10 @@ import re
 import json
 import subprocess as sp
 from mutagen.mp3 import MP3
-
 from adclassifier.google_cloud import send_to_google
 
 ffmpeg = os.environ['FFMPEG']
 
-def split_audio():
-    """
-    docstring
-    """
-    # TODO
 
 def json_parser(inputpath, outputpath, filetype):
     """
@@ -41,6 +35,27 @@ def json_parser(inputpath, outputpath, filetype):
 
             with open(filepath_out, 'w') as f:
                 f.write(ocrtext)
+    elif filetype == 'web':
+        for folder in os.listdir(inputpath):
+            webtext = ''
+            for file in os.listdir(os.path.join(inputpath, folder)):
+                filepath_in = os.path.join(inputpath, folder, file)
+                with open(filepath_in, 'r') as f:
+                    data = json.load(f)
+                    try:
+                        recognized_text = ''
+                        for i in range(len(data['responses'][0]['webDetection']['webEntities'])):
+                            text = data['responses'][0]['webDetection']['webEntities'][i]['description']
+                            recognized_text += "{},".format(text.lower())
+                    except:
+                        pass
+                webtext += recognized_text
+            # write to text
+            outfile = '.'.join([folder, 'txt'])
+            filepath_out = os.path.join(outputpath, outfile)
+
+            with open(filepath_out, 'w') as f:
+                f.write(webtext)
     else:
         for file in os.listdir(inputpath):
             filepath_in = os.path.join(inputpath, file)
@@ -168,6 +183,29 @@ def text_from_image(inputpath, outputpath):
             img = os.path.join(filepath_in, image)
             # make google api call
             resp = send_to_google(inputfile=img, filetype='image')
+            # save response
+            filename = '.'.join([os.path.splitext(image)[0], 'json'])
+            fileout = os.path.join(filepath_out, filename)
+            with open(fileout, 'w') as f:
+                json.dump(resp, f)
+
+
+def web_entity_detection(inputpath, outputpath):
+    """
+    docstring
+    """
+    for folder in os.listdir(inputpath):
+        # get the absolute path of input
+        filepath_in = os.path.join(inputpath, folder)
+        # get the absolute path of output
+        filepath_out = os.path.join(outputpath, folder)
+        os.makedirs(filepath_out, exist_ok=True)
+        # iterate over all the images in input
+        for image in os.listdir(filepath_in):
+            # get the absolute path of input image
+            img = os.path.join(filepath_in, image)
+            # make google api call
+            resp = send_to_google(inputfile=img, filetype='web')
             # save response
             filename = '.'.join([os.path.splitext(image)[0], 'json'])
             fileout = os.path.join(filepath_out, filename)
